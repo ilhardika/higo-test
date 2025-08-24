@@ -2,7 +2,7 @@
 
 ## Big Picture Architecture
 
-- **Monorepo**: Contains `backend/` (Node.js/Express/MongoDB) and `frontend/` (Next.js/React/Tailwind).
+- **Monorepo**: Contains `backend/` (/Express/MongoDB) and `frontend/` (Next.js/React/Tailwind).
 - **Backend**: REST API with pagination, filtering, aggregation; MongoDB Atlas for large datasets (1M+ rows); Swagger/Postman docs.
 - **Frontend**: Data visualization (charts/tables), polling for real-time updates, responsive UI.
 - **Docs**: API docs in Swagger (`backend/src/docs/openapi.json`) and Postman collection.
