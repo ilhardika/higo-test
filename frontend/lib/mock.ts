@@ -86,7 +86,8 @@ const MOCK: RecordItem[] = Array.from({ length: 125 }).flatMap((_, i) => {
     loginHour: s.loginHour,
     name: `${s.name} ${uid(2)}`,
     birthYear: s.birthYear,
-    gender: i % 3 === 0 ? "Female" : i % 3 === 1 ? "Male" : "Other",
+    // Only Male and Female (no 'Other')
+    gender: i % 2 === 0 ? "Female" : "Male",
     email: s.email.replace(/@(.*)$/, `+${i}@$1`),
     phone: s.phone,
     device: s.device,

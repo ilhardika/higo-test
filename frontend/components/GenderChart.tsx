@@ -6,32 +6,115 @@ export default function GenderChart({
   data: { gender: string; count: number }[];
 }) {
   const total = data.reduce((s, b) => s + b.count, 0) || 1;
+
   return (
-    <div>
+    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="text-lg font-semibold text-gray-900">
+          Gender Distribution
+        </h3>
+        <div className="text-sm text-gray-500">
+          Total: {total.toLocaleString()}
+        </div>
+      </div>
+
       {data.length === 0 ? (
-        <div className="text-sm text-gray-500">No data</div>
+        <div className="text-center py-8 text-gray-500">No data available</div>
       ) : (
-        <ul className="space-y-2">
-          {data.map((b) => {
-            const pct = Math.round((b.count / total) * 100);
+        <div className="space-y-4">
+          {data.map((item) => {
+            const percentage = Math.round((item.count / total) * 100);
+
             return (
-              <li key={b.gender} className="flex items-center gap-3">
-                <div className="w-24 text-xs text-gray-700 dark:text-gray-300">
-                  {b.gender}
+              <div key={item.gender} className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className={`w-4 h-4 rounded-full ${
+                        item.gender === "Male"
+                          ? "bg-blue-500"
+                          : item.gender === "Female"
+                          ? "bg-pink-500"
+                          : "bg-gray-400"
+                      }`}
+                    />
+                    <span className="font-medium text-gray-700">
+                      {item.gender}
+                    </span>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-semibold text-gray-900">
+                      {item.count.toLocaleString()}
+                    </div>
+                    <div className="text-sm text-gray-500">{percentage}%</div>
+                  </div>
                 </div>
-                <div className="flex-1 bg-gray-200 dark:bg-[#111] rounded overflow-hidden h-4">
+
+                <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
                   <div
-                    style={{ width: `${pct}%` }}
-                    className="h-4 bg-blue-500"
+                    className={`h-3 rounded-full transition-all duration-500 ${
+                      item.gender === "Male"
+                        ? "bg-gradient-to-r from-blue-400 to-blue-600"
+                        : item.gender === "Female"
+                        ? "bg-gradient-to-r from-pink-400 to-pink-600"
+                        : "bg-gradient-to-r from-gray-400 to-gray-600"
+                    }`}
+                    style={{ width: `${percentage}%` }}
                   />
                 </div>
-                <div className="w-12 text-right text-xs text-gray-600 dark:text-gray-400">
-                  {b.count}
-                </div>
-              </li>
+              </div>
             );
           })}
-        </ul>
+
+          {/* Pie Chart Visualization */}
+          <div className="mt-8 flex justify-center">
+            <div className="relative w-32 h-32">
+              <svg
+                className="w-full h-full transform -rotate-90"
+                viewBox="0 0 36 36"
+              >
+                <circle
+                  cx="18"
+                  cy="18"
+                  r="16"
+                  fill="none"
+                  stroke="#f3f4f6"
+                  strokeWidth="3"
+                />
+                {data.map((item, index) => {
+                  let cumulativePercentage = 0;
+                  for (let i = 0; i < index; i++) {
+                    cumulativePercentage += (data[i].count / total) * 100;
+                  }
+                  const currentPercentage = (item.count / total) * 100;
+
+                  return (
+                    <circle
+                      key={item.gender}
+                      cx="18"
+                      cy="18"
+                      r="16"
+                      fill="none"
+                      stroke={
+                        item.gender === "Male"
+                          ? "#3b82f6"
+                          : item.gender === "Female"
+                          ? "#ec4899"
+                          : "#6b7280"
+                      }
+                      strokeWidth="3"
+                      strokeDasharray={`${currentPercentage} ${
+                        100 - currentPercentage
+                      }`}
+                      strokeDashoffset={-cumulativePercentage}
+                      className="transition-all duration-500"
+                    />
+                  );
+                })}
+              </svg>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
