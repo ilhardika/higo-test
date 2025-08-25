@@ -1,0 +1,29 @@
+Rekomendasi alur (singkat, praktis) untuk dataset ~1M row dan integrasi FE:
+
+Kembangkan & validasi lokal dulu (FE + BE)
+
+Jalankan MongoDB lokal (Docker recommended) atau gunakan Atlas dev.
+Import subset kecil (1k–10k) untuk pengembangan FE agar cepat.
+Jalankan backend (Express + Mongoose) mengarah ke DB lokal.
+Jalankan frontend (Next.js) mengarah ke backend lokal (NEXT_PUBLIC_API_BASE_URL=http://localhost:4000).
+Verifikasi endpoint lewat Swagger/Postman dan integrasi FE (chart, table, pagination, filter).
+Pastikan schema & index cocok dengan CSV
+
+Buat Mongoose schema sesuai kolom CSV.
+Buat index pada fields filter/agg (gender, Login Hour/Date, Location Type, text index jika search).
+Pastikan pagination util default 25, max 100.
+Import full dataset untuk staging/production
+
+Untuk 1M row: jangan import ke lokal kecuali mesin kuat. Gunakan mongoimport ke Atlas atau streaming bulkWrite.
+Gunakan streaming CSV import (chunked bulkWrite) untuk menghindari OOM.
+Setelah import, jalankan index-setup script.
+Performance & kontrak API sebelum deploy
+
+Tes response times untuk endpoints utama (list, stats) pada DB staging.
+Optimasi agregasi / projection / indexes sampai <30s (target << 1s).
+Pastikan CORS / env / swagger docs OK.
+Deploy
+
+Deploy BE (Railway/Render); set MONGODB_URI → Atlas production DB.
+Deploy FE (Vercel) dan set NEXT_PUBLIC_API_BASE_URL ke BE.
+Publikasikan Swagger/Postman collection.
