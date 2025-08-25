@@ -26,7 +26,6 @@ export default function StatsCards({ data }: StatsCardsProps) {
       change: "+12.3%",
       changeType: "positive" as const,
       icon: "👥",
-      color: "from-blue-500 to-blue-600",
     },
     {
       title: "Average Age",
@@ -34,7 +33,6 @@ export default function StatsCards({ data }: StatsCardsProps) {
       change: "+2.1%",
       changeType: "positive" as const,
       icon: "📊",
-      color: "from-green-500 to-green-600",
     },
     {
       title: "Locations",
@@ -42,7 +40,6 @@ export default function StatsCards({ data }: StatsCardsProps) {
       change: "+5.2%",
       changeType: "positive" as const,
       icon: "📍",
-      color: "from-purple-500 to-purple-600",
     },
     {
       title: "Device Types",
@@ -50,7 +47,6 @@ export default function StatsCards({ data }: StatsCardsProps) {
       change: "-1.2%",
       changeType: "negative" as const,
       icon: "📱",
-      color: "from-orange-500 to-orange-600",
     },
   ];
 
