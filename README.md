@@ -105,27 +105,6 @@ GET /api/v1/stats/dashboard      # Complete analytics
 GET /api/v1/stats/gender         # Gender distribution
 ```
 
-## 🛠️ Development Commands
-
-```bash
-# Backend
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run import:full  # Import complete dataset (1M records)
-npm run import:test  # Import sample data (11 records)
-
-# Frontend
-npm run dev          # Start Next.js development
-npm run build        # Build for production
-npm run start        # Start production server
-
-# Database
-npm run db:reset     # Reset database
-npm run db:seed      # Seed sample data
-```
-
----
-
 ## ✨ Technical Highlights
 
 - **1M+ Records**: Handles large dataset efficiently
