@@ -1,49 +1,54 @@
 "use client";
 
-import { RecordItem } from "../lib/types";
+import { DashboardStats } from "../lib/types";
 
 interface StatsCardsProps {
-  data: RecordItem[];
+  dashboardStats: DashboardStats | null;
 }
 
-export default function StatsCards({ data }: StatsCardsProps) {
-  const totalRecords = data.length;
-  const maleCount = data.filter((r) => r.gender === "Male").length;
-  const femaleCount = data.filter((r) => r.gender === "Female").length;
-
-  const avgAge =
-    data.length > 0
-      ? Math.round(data.reduce((sum, r) => sum + r.age, 0) / data.length)
-      : 0;
-
-  const uniqueLocations = new Set(data.map((r) => r.locationName)).size;
-  const uniqueDevices = new Set(data.map((r) => r.brandDevice)).size;
+export default function StatsCards({ dashboardStats }: StatsCardsProps) {
+  if (!dashboardStats) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[...Array(4)].map((_, i) => (
+          <div
+            key={i}
+            className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 animate-pulse"
+          >
+            <div className="h-6 bg-gray-200 rounded mb-2"></div>
+            <div className="h-8 bg-gray-200 rounded mb-1"></div>
+            <div className="h-4 bg-gray-200 rounded w-16"></div>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   const stats = [
     {
       title: "Total Customers",
-      value: totalRecords.toLocaleString(),
+      value: dashboardStats.totalRecords.toLocaleString(),
       change: "+12.3%",
       changeType: "positive" as const,
       icon: "👥",
     },
     {
       title: "Average Age",
-      value: `${avgAge} years`,
+      value: `${dashboardStats.avgAge} years`,
       change: "+2.1%",
       changeType: "positive" as const,
       icon: "📊",
     },
     {
-      title: "Locations",
-      value: uniqueLocations.toString(),
+      title: "Unique Locations",
+      value: dashboardStats.topLocationsByName.length.toString(),
       change: "+5.2%",
       changeType: "positive" as const,
       icon: "📍",
     },
     {
       title: "Device Types",
-      value: uniqueDevices.toString(),
+      value: dashboardStats.uniqueDeviceCount.toString(),
       change: "-1.2%",
       changeType: "negative" as const,
       icon: "📱",
@@ -72,9 +77,6 @@ export default function StatsCards({ data }: StatsCardsProps) {
                   }`}
                 >
                   {stat.change}
-                </span>
-                <span className="text-gray-500 text-xs ml-2">
-                  vs last month
                 </span>
               </div>
             </div>

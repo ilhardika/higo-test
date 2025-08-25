@@ -29,6 +29,8 @@ export interface DashboardStats {
   locationDistribution: LocationStats[];
   interestDistribution: InterestStats[];
   avgAge: number;
+  topLocationsByName: LocationStats[];
+  uniqueDeviceCount: number;
 }
 
 export class RecordService {
@@ -193,6 +195,8 @@ export class RecordService {
       locationDistribution,
       interestDistribution,
       avgAgeResult,
+      topLocationsByName,
+      uniqueDeviceCount,
     ] = await Promise.all([
       RecordModel.countDocuments(matchStage).exec(),
       this.getGenderStats(query),
@@ -207,6 +211,35 @@ export class RecordService {
           },
         },
       ]).exec(),
+      // Top locations by name (not locationType)
+      RecordModel.aggregate([
+        ...(Object.keys(matchStage).length > 0 ? [{ $match: matchStage }] : []),
+        {
+          $group: {
+            _id: "$locationName",
+            count: { $sum: 1 },
+          },
+        },
+        {
+          $sort: { count: -1 as const },
+        },
+        { $limit: 6 },
+      ]).exec(),
+      // Unique device brands count
+      RecordModel.aggregate([
+        ...(Object.keys(matchStage).length > 0 ? [{ $match: matchStage }] : []),
+        {
+          $group: {
+            _id: "$brandDevice",
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            count: { $sum: 1 },
+          },
+        },
+      ]).exec(),
     ]);
 
     return {
@@ -214,7 +247,9 @@ export class RecordService {
       genderDistribution,
       locationDistribution,
       interestDistribution,
-      avgAge: avgAgeResult[0]?.avgAge || 0,
+      avgAge: Math.round(avgAgeResult[0]?.avgAge || 0),
+      topLocationsByName: topLocationsByName,
+      uniqueDeviceCount: uniqueDeviceCount[0]?.count || 0,
     };
   }
 }

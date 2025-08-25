@@ -19,6 +19,8 @@ export interface DashboardStats {
     locationDistribution: LocationStats[];
     interestDistribution: InterestStats[];
     avgAge: number;
+    topLocationsByName: LocationStats[];
+    uniqueDeviceCount: number;
 }
 export declare class RecordService {
     listRecords(query: ListRecordsQuery): Promise<PaginatedResponse<IRecord>>;

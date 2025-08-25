@@ -128,7 +128,7 @@ class RecordService {
         if (query.digitalInterest) {
             matchStage.digitalInterest = query.digitalInterest;
         }
-        const [totalRecords, genderDistribution, locationDistribution, interestDistribution, avgAgeResult,] = await Promise.all([
+        const [totalRecords, genderDistribution, locationDistribution, interestDistribution, avgAgeResult, topLocationsByName, uniqueDeviceCount,] = await Promise.all([
             Record_model_1.RecordModel.countDocuments(matchStage).exec(),
             this.getGenderStats(query),
             this.getLocationStats(query),
@@ -142,13 +142,44 @@ class RecordService {
                     },
                 },
             ]).exec(),
+            // Top locations by name (not locationType)
+            Record_model_1.RecordModel.aggregate([
+                ...(Object.keys(matchStage).length > 0 ? [{ $match: matchStage }] : []),
+                {
+                    $group: {
+                        _id: "$locationName",
+                        count: { $sum: 1 },
+                    },
+                },
+                {
+                    $sort: { count: -1 },
+                },
+                { $limit: 6 },
+            ]).exec(),
+            // Unique device brands count
+            Record_model_1.RecordModel.aggregate([
+                ...(Object.keys(matchStage).length > 0 ? [{ $match: matchStage }] : []),
+                {
+                    $group: {
+                        _id: "$brandDevice",
+                    },
+                },
+                {
+                    $group: {
+                        _id: null,
+                        count: { $sum: 1 },
+                    },
+                },
+            ]).exec(),
         ]);
         return {
             totalRecords,
             genderDistribution,
             locationDistribution,
             interestDistribution,
-            avgAge: avgAgeResult[0]?.avgAge || 0,
+            avgAge: Math.round(avgAgeResult[0]?.avgAge || 0),
+            topLocationsByName: topLocationsByName,
+            uniqueDeviceCount: uniqueDeviceCount[0]?.count || 0,
         };
     }
 }
