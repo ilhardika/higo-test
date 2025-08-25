@@ -4,10 +4,10 @@ import type { RecordItem } from "../lib/types";
 
 export default function DataTable({
   data,
-  loading,
+  loading = false,
 }: {
   data: RecordItem[];
-  loading: boolean;
+  loading?: boolean;
 }) {
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
@@ -75,11 +75,10 @@ export default function DataTable({
                 </td>
               </tr>
             ) : (
-              data.map((record, index) => {
-                const age = 2024 - record.birthYear;
+              data.map((record) => {
                 return (
                   <tr
-                    key={record.id}
+                    key={record._id}
                     className="hover:bg-gray-50 transition-colors duration-150"
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -119,11 +118,11 @@ export default function DataTable({
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {age} years
+                      {record.age} years
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">
-                        {record.location}
+                        {record.locationName}
                       </div>
                       <div className="text-sm text-gray-500">
                         {record.locationType}
@@ -131,7 +130,7 @@ export default function DataTable({
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
-                        {record.interest}
+                        {record.digitalInterest}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
