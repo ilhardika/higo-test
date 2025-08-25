@@ -8,7 +8,7 @@ interface LocationChartProps {
 
 export default function LocationChart({ data }: LocationChartProps) {
   const locationStats = data.reduce((acc, record) => {
-    acc[record.location] = (acc[record.location] || 0) + 1;
+    acc[record.locationName] = (acc[record.locationName] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
 

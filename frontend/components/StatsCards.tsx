@@ -13,13 +13,11 @@ export default function StatsCards({ data }: StatsCardsProps) {
 
   const avgAge =
     data.length > 0
-      ? Math.round(
-          data.reduce((sum, r) => sum + (2024 - r.birthYear), 0) / data.length
-        )
+      ? Math.round(data.reduce((sum, r) => sum + r.age, 0) / data.length)
       : 0;
 
-  const uniqueLocations = new Set(data.map((r) => r.location)).size;
-  const uniqueDevices = new Set(data.map((r) => r.device)).size;
+  const uniqueLocations = new Set(data.map((r) => r.locationName)).size;
+  const uniqueDevices = new Set(data.map((r) => r.brandDevice)).size;
 
   const stats = [
     {
@@ -28,6 +26,7 @@ export default function StatsCards({ data }: StatsCardsProps) {
       change: "+12.3%",
       changeType: "positive" as const,
       icon: "👥",
+      color: "from-blue-500 to-blue-600",
     },
     {
       title: "Average Age",
@@ -35,6 +34,7 @@ export default function StatsCards({ data }: StatsCardsProps) {
       change: "+2.1%",
       changeType: "positive" as const,
       icon: "📊",
+      color: "from-green-500 to-green-600",
     },
     {
       title: "Locations",
@@ -42,6 +42,7 @@ export default function StatsCards({ data }: StatsCardsProps) {
       change: "+5.2%",
       changeType: "positive" as const,
       icon: "📍",
+      color: "from-purple-500 to-purple-600",
     },
     {
       title: "Device Types",
@@ -49,6 +50,7 @@ export default function StatsCards({ data }: StatsCardsProps) {
       change: "-1.2%",
       changeType: "negative" as const,
       icon: "📱",
+      color: "from-orange-500 to-orange-600",
     },
   ];
 
