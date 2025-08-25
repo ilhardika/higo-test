@@ -8,6 +8,8 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "import:csv": "tsx src/scripts/import-csv.ts",
+    "import:atlas": "tsx src/scripts/import-to-atlas.ts",
+    "test:atlas": "tsx src/scripts/test-atlas-connection.ts",
     "setup:indexes": "tsx src/scripts/setup-indexes.ts"
   },
   "dependencies": {
