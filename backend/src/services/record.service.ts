@@ -104,7 +104,7 @@ export class RecordService {
         },
       },
       {
-        $sort: { count: -1 },
+        $sort: { count: -1 as const },
       },
     ];
 
@@ -138,7 +138,7 @@ export class RecordService {
         },
       },
       {
-        $sort: { count: -1 },
+        $sort: { count: -1 as const },
       },
     ];
 
@@ -165,7 +165,7 @@ export class RecordService {
         },
       },
       {
-        $sort: { count: -1 },
+        $sort: { count: -1 as const },
       },
     ];
 
